@@ -6,10 +6,17 @@ The basic usage is by running the sript file "run.sh"
 >run.sh EXP_TYPE ENV_TYPE PRED_TYPE PLAN_TYPE
 
 The function of each file is as follows:
+
 DS.py: A basic implementation of D-S evidence theory.
+
 DartSim.py: Simulation of DARTSim, the managed system.
+
 Environment: Generate environment from file.
+
 ManagingSystem.py: The managing system.
+
 Predictor.py: An implementation of the forward-looking sensor in DARTSim as the predictor.
+
 main.py: The overall procedure for running the experiment.
+
 smpc.py: An implementation of SMPC based on do_mpc package.
