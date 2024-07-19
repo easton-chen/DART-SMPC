@@ -47,7 +47,7 @@ elif [ $EXP_TYPE == "pred" ]; then
         python3 main.py $EXP_TYPE $ENV_TYPE $ENV_CASE $PRED_TYPE $PLAN_TYPE >MPC.log
     done  
 elif [ $EXP_TYPE == "setting-u" ]; then
-    for ENV_CASE in {20..49}
+    for ENV_CASE in {0..1}
     do
         echo "python3 main.py $EXP_TYPE $ENV_TYPE $ENV_CASE $PRED_TYPE $PLAN_TYPE >MPC.log"
         python3 main.py $EXP_TYPE $ENV_TYPE $ENV_CASE $PRED_TYPE $PLAN_TYPE >MPC.log

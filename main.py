@@ -27,6 +27,7 @@ class ExpInstance:
         self.revenue_list = []
         self.principal_list = []
         self.interest_list = []
+        self.destory_list = []
         self.log_file = log_file
 
     def printType(self):
@@ -281,18 +282,22 @@ elif(exp_type == "pred"):
             print("total revenue = " + str(total_revenue) + ", total principal = " + str(total_principal) + ", total interest = " + str(total_interest),file=f)
 
 elif(exp_type == "setting-u"):
-    log_file = './Results/setting-u/DART-' + str(env_case) + ".log"
+    #log_file = './Results/setting-u/DART-' + str(env_case) + ".log"
+    log_file = './Results/setting-u-rel/DART-' + str(env_case) + ".log"
     with open(log_file, 'w') as f:
         for target_revenue in [5,10,15,20,25,30]:
             for threat_revenue in [5,10,15,20,25,30]:
                 exp_instance_1 = ExpInstance(pred_type, "smpc", "lat", horizon, env, log_file, target_revenue, threat_revenue)
                 exp_instance_2 = ExpInstance(pred_type, "mpc", "nolat", horizon, env, log_file, target_revenue, threat_revenue)
                 exp_instance_list = [exp_instance_1, exp_instance_2]
+
+                threat_num = 0
         
                 for t in range(time_limit):
                     #print("\ntime: " + str(t), file=f)
                     target = env.target[t]
                     threat = env.threat[t]
+                    threat_num += threat
                     #print("Environment: target: " + str(target) + " " + "threat: " + str(threat) ,file=f)
 
                     target_list = env.target[t:t+horizon]
@@ -319,21 +324,30 @@ elif(exp_type == "setting-u"):
                         revenue = exp_instance.dart.getReward(target, threat)
                         principal = exp_instance.dart.getPrincipal(u0)
                         interest = exp_instance.dart.getInterest()
+                        if(threat == 1):
+                            destory_prob = exp_instance.dart.getDestoryProb()
+                        else:
+                            destory_prob = 0
                         #print("Revenue: " + str(revenue) + " Principal: " + str(principal) + " Interest: " + str(interest),file=f)
                         exp_instance.revenue_list.append(revenue)
                         exp_instance.principal_list.append(principal)
                         exp_instance.interest_list.append(interest)
+                        exp_instance.destory_list.append(destory_prob)
 
                 for exp_instance in exp_instance_list:
                     total_revenue = 0
                     total_principal = 0
                     total_interest = 0
+                    total_destory = 0
                     for r in exp_instance.revenue_list:
                         total_revenue += r
                     for p in exp_instance.principal_list:
                         total_principal += p
                     for i in exp_instance.interest_list:
                         total_interest += i
+                    for prob in exp_instance.destory_list:
+                        total_destory += prob
+                    total_destory_prob = total_destory / threat_num
 
                     print("total revenue = " + str(total_revenue) + ", total principal = " + str(total_principal) + ", total interest = " + str(total_interest)
-                            + " " + str(target_revenue) + " " + str(threat_revenue) ,file=f)
+                            + ", total destory = " + str(total_destory) + " " + str(total_destory_prob) + " " + str(target_revenue) + " " + str(threat_revenue) ,file=f)

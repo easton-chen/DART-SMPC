@@ -62,3 +62,13 @@ class Dart:
     def getInterest(self):
         cost_ecm = 0.5
         return self.ECM * cost_ecm
+    
+    def getDestoryProb(self):
+        rT = 5 # threat range
+        rS = 5 # sensor target range
+        f_factor = 1.3
+        ecm_factor = 2
+        destory_prob = max(0,rT - self.altitude) / rT * ((1 - self.formation) + self.formation/f_factor) * ((1 - self.ECM) + self.ECM / ecm_factor)
+        detect_prob = max(0,rS - self.altitude) / rS * ((1 - self.formation) + self.formation/f_factor) * ((1 - self.ECM) + self.ECM / ecm_factor)
+        
+        return destory_prob
